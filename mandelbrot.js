@@ -1,5 +1,12 @@
+//Fixed parameters for mandlebrot algorithm
 const MAX_ITERATIONS = 50;
 const MAGNITUDE_LIMIT = 4;
+
+// Corners of the graph
+const LEFT = -2;
+const RIGHT = 4;
+const BOTTOM = -2;
+const TOP = 4;
 
 function* linspace(start, end, size){
   for(let i = 0; i < size; i++){
@@ -8,6 +15,10 @@ function* linspace(start, end, size){
 }
 
 function mandelbrot(c, max_iterations, magnitude_limit){
+  // Iteratative function that keeps plugging the result
+  // back into z^2+c starting with z=(0,0). If the magnitude
+  // of the complex number z exceeds the limit we quit otherwise
+  // we keep going until the max iteration has been reached.
   let curr_iteration = 0;
   let z = math.complex(0, 0);
   let mag = 0;
@@ -23,9 +34,11 @@ function mandelbrot(c, max_iterations, magnitude_limit){
 }
 
 function* mandelbrot_generator(){
-  const x_space = linspace(-2, 4, 1000);
+  // A generator that will return the mandelbrot
+  // computation of each point on the graph.
+  const x_space = linspace(LEFT, RIGHT, 1000);
   for(let x of x_space){
-    let y_space = linspace(-2, 4, 1000);
+    let y_space = linspace(BOTTOM, TOP, 1000);
     for(let y of y_space){
       yield Object.assign({}, {x, y}, mandelbrot(math.complex(x, y), MAX_ITERATIONS, MAGNITUDE_LIMIT));
     }
@@ -33,13 +46,15 @@ function* mandelbrot_generator(){
 }
 
 function converges(pt){
+  // Does the complex number converge?
   return pt.iterations >= (MAX_ITERATIONS - 1);
 }
 
 function draw_mandelbrot_point(pt){
+  // If the complex number converges then we will draw it.
   push();
-  let canvas_x = map(pt.x, -2, 4, 0, width);
-  let canvas_y = map(pt.y, -2, 4, 0, height);
+  let canvas_x = map(pt.x, LEFT, RIGHT, 0, width);
+  let canvas_y = map(pt.y, BOTTOM, TOP, 0, height);
   noStroke();
   fill(0);
   rect(canvas_x, canvas_y, 1, 1);
@@ -55,6 +70,9 @@ function setup(){
 }
 
 function draw(){
+  // Iterate on each point in the graph and if it is
+  // a convergent point it belongs to the mandelbrot
+  // set in which case we will draw it.
   const mandel = mandelbrot_generator();
   for(let m of mandel){
     if (converges(m)){
