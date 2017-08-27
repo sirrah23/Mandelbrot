@@ -1,5 +1,5 @@
 {
-  "name": "Mandelbrot",
+  "name": "mandelbrot",
   "authors": [
     "sirrah23 <hseth93@gmail.com>"
   ],
@@ -14,5 +14,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "p5.js": "p5js#^0.5.13",
+    "mathjs": "^3.16.2"
+  }
 }
