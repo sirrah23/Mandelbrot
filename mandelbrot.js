@@ -27,20 +27,21 @@ function* mandelbrot_generator(){
   for(let x of x_space){
     let y_space = linspace(-2, 4, 1000);
     for(let y of y_space){
-      yield {x, y, mandelbrot_run: mandelbrot(math.complex(x, y), MAX_ITERATIONS, MAGNITUDE_LIMIT)};
+      yield Object.assign({}, {x, y}, mandelbrot(math.complex(x, y), MAX_ITERATIONS, MAGNITUDE_LIMIT));
     }
   }
 }
 
 function converges(pt){
-  return pt.mandelbrot_run.iterations >= (MAX_ITERATIONS - 1);
+  return pt.iterations >= (MAX_ITERATIONS - 1);
 }
 
 function draw_mandelbrot_point(pt){
   push();
   let canvas_x = map(pt.x, -2, 4, 0, width);
   let canvas_y = map(pt.y, -2, 4, 0, height);
-  fill(255, 0, 0);
+  noStroke();
+  fill(0);
   rect(canvas_x, canvas_y, 1, 1);
   pop();
 }
